@@ -21,8 +21,8 @@ public class UserUnitTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "  "})
     public void shouldThrowExceptionWhenSetEmailToEmpty(String email) {
-        //IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> user.setEmail(email));
-        //assertEquals("email cannot be null or empty", exception.getMessage());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> user.setEmail(email));
+        assertEquals("email cannot be null or empty", exception.getMessage());
     }
 
     @DisplayName("should throw exception when pass null to setEmail function")

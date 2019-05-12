@@ -1,5 +1,10 @@
 package rockets.model;
 
+import org.neo4j.ogm.annotation.CompositeIndex;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -8,28 +13,40 @@ import java.util.Set;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
+
+@NodeEntity
+@CompositeIndex(properties = {"launchDate", "launchVehicle", "launchSite", "orbit"}, unique = true)
 public class Launch extends Entity {
     public enum LaunchOutcome {
         FAILED, SUCCESSFUL
     }
 
+    @Property(name = "launchServiceProvider")
+    private LaunchServiceProvider launchServiceProvider;
+
+    @Property(name = "launchDate")
     private LocalDate launchDate;
 
+    @Relationship(type = "PROVIDES", direction = INCOMING)
     private Rocket launchVehicle;
-
-    private LaunchServiceProvider launchServiceProvider;
 
     private Set<String> payload;
 
+    @Property(name = "launchSite")
     private String launchSite;
 
+    @Property(name = "orbit")
     private String orbit;
 
+    @Property(name = "function")
     private String function;
 
-    private BigDecimal price;
-
+    @Property(name = "launchOutcome")
     private LaunchOutcome launchOutcome;
+
+    @Property(name = "price")
+    private BigDecimal price;
 
 
     public LocalDate getLaunchDate() {

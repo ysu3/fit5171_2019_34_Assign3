@@ -1,5 +1,7 @@
 package rockets.model;
 
+import org.neo4j.ogm.annotation.NodeEntity;
+
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
