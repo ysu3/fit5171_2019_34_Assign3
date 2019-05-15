@@ -5,18 +5,52 @@ import java.util.Objects;
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.apache.commons.lang3.Validate.notBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.neo4j.ogm.annotation.CompositeIndex;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
+import static org.neo4j.ogm.annotation.Relationship.OUTGOING;
+
+@NodeEntity
+@CompositeIndex(properties = {"name", "country", "manufacturer"}, unique = true)
 public class Rocket extends Entity {
+    @Property(name="name")
     private String name;
 
+    @Property(name="country")
     private String country;
 
+    @Relationship(type = "MANUFACTURES", direction = INCOMING)
     private LaunchServiceProvider manufacturer;
 
+    @Property(name="massToLEO")
     private String massToLEO;
 
+    @Property(name="massToGTO")
     private String massToGTO;
 
+    @Property(name="massToOther")
     private String massToOther;
+
+    @Property(name="firstYearFlight")
+    private int firstYearFlight;
+
+    @Property(name="lastYearFlight")
+    private int latestYearFlight;
+
+    @Relationship(type = "PROVIDES", direction = OUTGOING)
+    @JsonIgnore
+    private Set<Launch> launches;
+
+    public Rocket() {
+        super();
+    }
 
     /**
      * All parameters shouldn't be null.
@@ -150,6 +184,22 @@ public class Rocket extends Entity {
         else if (i > 50000)
             throw new IllegalArgumentException("MassToOther cannot be larger than 200000");
         this.massToOther = massToOther;
+    }
+
+    public void setFirstYearFlight(int firstYearFlight) {
+        this.firstYearFlight = firstYearFlight;
+    }
+
+    public void setLatestYearFlight(int latestYearFlight) {
+        this.latestYearFlight = latestYearFlight;
+    }
+
+    public Set<Launch> getLaunches() {
+        return launches;
+    }
+
+    public void setLaunches(Set<Launch> launches) {
+        this.launches = launches;
     }
 
     @Override

@@ -24,6 +24,12 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+import com.google.common.collect.Sets;
+//import org.junit.jupiter.api.Assertions;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class RocketMinerUnitTest {
     Logger logger = LoggerFactory.getLogger(RocketMinerUnitTest.class);
 
@@ -76,6 +82,11 @@ public class RocketMinerUnitTest {
             spy(l);
             return l;
         }).collect(Collectors.toList());
+
+        rockets.get(0).setLaunches(Sets.newHashSet(launches.subList(0, 4)));
+        rockets.get(1).setLaunches(Sets.newHashSet(launches.subList(4, 7)));
+        rockets.get(2).setLaunches(Sets.newHashSet(launches.subList(7, 9)));
+        rockets.get(3).setLaunches(Sets.newHashSet(launches.get(9)));
     }
 
 

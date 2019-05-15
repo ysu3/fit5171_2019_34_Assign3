@@ -6,19 +6,43 @@ import java.util.Objects;
 import java.util.Set;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.neo4j.ogm.annotation.CompositeIndex;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.LinkedHashSet;
+
+import static org.neo4j.ogm.annotation.Relationship.OUTGOING;
+
+@NodeEntity
+@CompositeIndex(properties = {"name", "yearFounded", "country"}, unique = true)
 public class LaunchServiceProvider extends Entity {
+    @Property(name = "name")
     private String name;
 
+    @Property(name = "yearFounded")
     private int yearFounded;
 
+    @Property(name = "country")
     private String country;
 
+    @Property(name = "headquarters")
     private String headquarters;
 
+    @Relationship(type = "MANUFACTURES", direction= OUTGOING)
+    @JsonIgnore
     private Set<Rocket> rockets;
 
+    public LaunchServiceProvider() {
+        super();
+    }
+
     public LaunchServiceProvider(String name, int yearFounded, String country) {
+        notNull(name);
+        notNull(country);
+
         this.name = name;
         this.yearFounded = yearFounded;
         this.country = country;
