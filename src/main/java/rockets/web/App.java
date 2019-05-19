@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rockets.dataaccess.DAO;
 import rockets.dataaccess.neo4j.Neo4jDAO;
+import rockets.model.LaunchServiceProvider;
 import rockets.model.Rocket;
 import rockets.model.User;
 import spark.ModelAndView;
@@ -277,6 +278,45 @@ public class App {
 
     // TODO: Need to TDD this
     private static void handlePostCreateRocket() {
+        post("/rockets", (req, res) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            String rockets_name = req.queryParams("rockets_name");
+            String country = req.queryParams("country");
+            //LaunchServiceProvider manufacturer = req.queryParams("manufacturer");
+            String massToLEO = req.queryParams("massToLEO");
+            String massToGTO = req.queryParams("massToGTO");
+            String massToOther = req.queryParams("massToOther");
+
+
+
+            logger.info("Rockets <" + rockets_name + ">, ");
+
+            Rocket rocket = null;
+            try {
+                rocket = new Rocket();
+                rocket.setName(rockets_name);
+                rocket.setCountry(country);
+                //rocket.setManufacturer(manufacturer);
+                rocket.setMassToLEO(massToLEO);
+                rocket.setMassToGTO(massToGTO);
+                rocket.setMassToOther(massToOther);
+                dao.createOrUpdate(rocket);
+                rocket = dao.getRocketByName(rockets_name);
+            } catch (Exception e) {
+                handleException(res, attributes, e, "rockets.html.ftl");
+            }
+            if (null != rocket && rocket.getName().equals(rockets_name)) {
+                res.status(301);
+                req.session(true);
+                req.session().attribute("rocket", rocket);
+                res.redirect("/rocket");
+                return new ModelAndView(attributes, "base_page.html.ftl");
+            } else {
+                attributes.put("errorMsg", "Invalid Rocket name you chose.");
+                attributes.put("rocket_name", rockets_name);
+                return new ModelAndView(attributes, "rockets.html.ftl");
+            }
+        }, new FreeMarkerEngine());
     }
 
     // TODO: Need to TDD this
