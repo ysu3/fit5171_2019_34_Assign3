@@ -26,7 +26,7 @@
 <div>
     <p>* Fields are required.</p>
 </div>
-<form name="create_event" action="/mission/create" method="POST">
+<form name="create_event" action="/rockets" method="POST">
     <div id="admin_left_pane" class="fieldset_without_border">
         <div><p>Mission Details</p></div>
         <ol>
@@ -34,10 +34,7 @@
                 <label for="missionName" class="bold">Mission Name:*</label>
                 <input id="missionName" name="missionName" type="text" value="${missionName!""}">
             </li>
-            <li>
-                <label for="time" class="bold">Date and time (dd/mm/yyyy, HH AM/PM):*</label>
-                <input id="time" name="time" type="text" value="${time?datetime!""}">
-            </li>
+
             <li>
                 <label for="location" class="bold">Location:*</label>
                 <input id="location" name="location" type="text" value="${location!""}">

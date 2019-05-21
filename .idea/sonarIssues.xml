@@ -23,6 +23,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/spark/template/freemarker/create_rocket.html.ftl">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/spark/template/freemarker/rockets.html.ftl">
+          <value>
+            <set />
+          </value>
+        </entry>
       </map>
     </option>
   </component>

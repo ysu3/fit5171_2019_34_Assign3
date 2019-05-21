@@ -17,7 +17,7 @@ public interface DAO {
 
     User getUserByEmail(String email);
 
-    //Rocket getRocketByName(String name);
+    Rocket getRocketByName(String name);
 
     void close();
 }
