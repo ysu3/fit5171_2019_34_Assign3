@@ -140,7 +140,7 @@ public class App {
             String lastName = req.queryParams("lastName");
 
             attributes.put("email", email);
-            attributes.put("password",password);
+            attributes.put("password",password);  //add the password attributes
             attributes.put("firstName", firstName);
             attributes.put("lastName", lastName);
             logger.info("Registering <" + email + ">, " + password);
@@ -272,7 +272,7 @@ public class App {
     }
 
     // TODO: Need to TDD this
-    ///rocket/:id
+    //rocket/:id
     private static void handleGetRocket() {
         get("/rocket/:id", (req,res)-> {
             Map<String,Object> attributes = new HashMap<>();
