@@ -321,6 +321,16 @@ public class App {
 
     // TODO: Need to TDD this
     private static void handleGetCreateRocket() {
+        get("/rocket/create", (req, res) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("rockets_name", "");
+            attributes.put("country", "");
+            attributes.put("massToLEO", "");
+            attributes.put("massToGTO", "");
+            attributes.put("massToOther", "");
+
+            return  new ModelAndView(attributes, "rocket.html.ftl");
+        }, new FreeMarkerEngine());
     }
 
 
