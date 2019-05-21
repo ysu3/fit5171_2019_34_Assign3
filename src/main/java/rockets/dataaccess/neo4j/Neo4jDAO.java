@@ -140,6 +140,18 @@ public class Neo4jDAO implements DAO {
         }
     }
 
+    /*@Override
+    public Rocket getRocketByName(String name) {
+      Collection<Rocket> rockets = session.loadAll(Rocket.class,new Filter("name",EQUALS,name));
+      if (null == rockets || rockets.isEmpty())
+      {
+          return null;
+      }
+      else {
+          return rockets.iterator().next();
+      }
+    }*/
+
     @Override
     public void close() {
         sessionFactory.close();

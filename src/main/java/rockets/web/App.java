@@ -140,7 +140,7 @@ public class App {
             String lastName = req.queryParams("lastName");
 
             attributes.put("email", email);
-            //attributes.put("password",password);
+            attributes.put("password",password);
             attributes.put("firstName", firstName);
             attributes.put("lastName", lastName);
             logger.info("Registering <" + email + ">, " + password);
@@ -272,12 +272,29 @@ public class App {
     }
 
     // TODO: Need to TDD this
+    ///rocket/:id
     private static void handleGetRocket() {
-
+        get("/rocket/:id", (req,res)-> {
+            Map<String,Object> attributes = new HashMap<>();
+            try{
+                String id = req.params(":id");
+                Rocket rocket = dao.load(Rocket.class, Long.parseLong(id));
+                if(null != rocket)
+                    attributes.put("rocket",rocket);
+                else {
+                    attributes.put("errorMsg","No rocket with the ID " + id + ".");
+                }
+                return new ModelAndView(attributes, "rocket.html.ftl");
+            }
+            catch (Exception e) {
+                return handleException(res, attributes, e, "rocket.html.ftl");
+            }
+        },new FreeMarkerEngine());
     }
 
     // TODO: Need to TDD this
     private static void handlePostCreateRocket() {
+
     }
 
     // TODO: Need to TDD this
