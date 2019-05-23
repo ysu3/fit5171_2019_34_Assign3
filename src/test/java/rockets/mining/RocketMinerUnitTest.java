@@ -29,7 +29,7 @@ import com.google.common.collect.Sets;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class RocketMinerUnitTest {
     Logger logger = LoggerFactory.getLogger(RocketMinerUnitTest.class);
 
@@ -177,3 +177,4 @@ public class RocketMinerUnitTest {
     }
 
 }
+*/

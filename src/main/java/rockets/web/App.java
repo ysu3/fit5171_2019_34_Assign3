@@ -22,9 +22,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import static org.apache.logging.log4j.core.util.Closer.closeSilently;
-import static spark.Spark.get;
-import static spark.Spark.port;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 public class App {
     private static Logger logger = LoggerFactory.getLogger(App.class);
@@ -88,7 +86,12 @@ public class App {
         // "/launches"
 //        handleGetLaunches();
 
+        //"/rocket/delete
+        handleDeleteRocket();
     }
+
+
+
 
     public static void stop() {
         Spark.stop();
@@ -289,10 +292,10 @@ public class App {
     private static void handleGetRocket() {
         get("/rocket/:id", (req,res)-> {
             Map<String,Object> attributes = new HashMap<>();
-            Rocket rocket = getRockets(req);
+            //Rocket rocket = getRockets(req);
             try{
-                String id = req.params(":id");
-                 rocket = dao.load(Rocket.class, Long.parseLong(id));
+                 String id = req.params(":id");
+                 Rocket rocket = dao.load(Rocket.class, Long.parseLong(id));
                 if(null != rocket && !rocket.equals(""))
                     attributes.put("rocket",rocket);
                 else {
@@ -310,37 +313,36 @@ public class App {
     private static void handlePostCreateRocket() {
         post("/rockets", (req, res) -> {
             Map<String, Object> attributes = new HashMap<>();
-            String rockets_name = req.queryParams("missionName");
-            String country = req.queryParams("location");
-            //LaunchServiceProvider manufacturer = req.queryParams("manufacturer");
+            String rockets_name = req.queryParams("missionName"); //changed
+            String country = req.queryParams("location");//changed
+            String manufacturer = req.queryParams("description");//changed
+            //manufacturer = req.queryParams("manufacturer");
             //String massToLEO = req.queryParams("massToLEO");
             //String massToGTO = req.queryParams("massToGTO");
-           // String massToOther = req.queryParams("massToOther");
+            //String massToOther = req.queryParams("massToOther");
+
+            attributes.put("missionName",rockets_name);
+            attributes.put("locatioon",country);
+            attributes.put("description",manufacturer);
             logger.info("Rockets <" + rockets_name + ">, ");
-            Rocket rocket = null;
+            Rocket rocket;//= null;
             try {
                 rocket = new Rocket();
                 rocket.setName(rockets_name);
                 rocket.setCountry(country);
-                //rocket.setManufacturer(manufacturer);
+                rocket.setManufacturer(manufacturer);
                 //rocket.setMassToLEO(massToLEO);
                 //rocket.setMassToGTO(massToGTO);
                 //rocket.setMassToOther(massToOther);
                 dao.createOrUpdate(rocket);
-                rocket = dao.getRocketByName(rockets_name);
-            } catch (Exception e) {
-                handleException(res, attributes, e, "rockets.html.ftl");
-            }
-            if (null != rocket && rocket.getName().equals(rockets_name)) {
+                //rocket = dao.getRocketByName(rockets_name);
                 res.status(301);
                 req.session(true);
-                req.session().attribute("rocket", rocket);
-                res.redirect("/rocket");
-                return new ModelAndView(attributes, "base_page.html.ftl");
-            } else {
-                attributes.put("errorMsg", "Invalid Rocket name you chose.");
-                attributes.put("rocket_name", rockets_name);
+                req.session().attribute("rocket",rocket);
+                res.redirect("/rockets");
                 return new ModelAndView(attributes, "rockets.html.ftl");
+            } catch (Exception e) {
+                return handleException(res, attributes, e, "create_rocket.html.ftl"); //changed
             }
         }, new FreeMarkerEngine());
     }
@@ -351,9 +353,10 @@ public class App {
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("rockets_name", "");
             attributes.put("country", "");
-            attributes.put("massToLEO", "");
-            attributes.put("massToGTO", "");
-            attributes.put("massToOther", "");
+            attributes.put("location","");
+            //attributes.put("massToLEO", "");
+            //attributes.put("massToGTO", "");
+            //attributes.put("massToOther", "");
             return  new ModelAndView(attributes, "create_rocket.html.ftl");
         }, new FreeMarkerEngine());
     }
@@ -363,12 +366,32 @@ public class App {
         get("/rockets", (req, res) -> {
             Map<String, Object> attributes = new HashMap<>();
             try {
-                attributes.put("missions", dao.loadAll(Rocket.class));
+                //The K:value should be rockets. not mission
+                attributes.put("rockets", dao.loadAll(Rocket.class));
                 return new ModelAndView(attributes, "rockets.html.ftl");
             } catch (Exception e) {
                 return handleException(res, attributes, e, "rockets.html.ftl");
             }
         }, new FreeMarkerEngine());
+    }
+
+    private static void handleDeleteRocket() {
+        delete("/rocket/:id", (req,res)-> {
+            Map<String,Object> attributes = new HashMap<>();
+            try{
+                String id = req.params(":id");
+                Rocket rocket = dao.load(Rocket.class, Long.parseLong(id));
+                if(null != rocket && !rocket.equals(""))
+                    attributes.remove("rocket",rocket);
+                else {
+                    attributes.put("errorMsg","No rocket with the ID " + id + ".");
+                }
+                return new ModelAndView(attributes, "rocket.html.ftl");
+            }
+            catch (Exception e) {
+                return handleException(res, attributes, e, "rocket.html.ftl");
+            }
+        },new FreeMarkerEngine());
     }
 
     private static Properties loadProperties() throws IOException {

@@ -27,7 +27,7 @@ public class Rocket extends Entity {
     private String country;
 
     @Relationship(type = "MANUFACTURES", direction = INCOMING)
-    private LaunchServiceProvider manufacturer;
+    private String manufacturer;
 
     @Property(name="massToLEO")
     private String massToLEO;
@@ -59,7 +59,7 @@ public class Rocket extends Entity {
      * @param country
      * @param manufacturer
      */
-    public Rocket(String name, String country, LaunchServiceProvider manufacturer) {
+    public Rocket(String name, String country, String manufacturer) {
         notNull(name);
         notNull(country);
         notNull(manufacturer);
@@ -77,7 +77,7 @@ public class Rocket extends Entity {
         return country;
     }
 
-    public LaunchServiceProvider getManufacturer() {
+    public String getManufacturer() {
         return manufacturer;
     }
 
@@ -118,7 +118,7 @@ public class Rocket extends Entity {
     }
 
 
-    public void setManufacturer(LaunchServiceProvider manufacturerName) {
+    public void setManufacturer(String manufacturerName) {
         notNull(manufacturerName,"manufacturer name cannot be null or empty");
         this.manufacturer = manufacturerName;
     }

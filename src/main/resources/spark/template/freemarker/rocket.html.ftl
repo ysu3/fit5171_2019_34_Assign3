@@ -24,13 +24,24 @@
     <p>Rocket details:</p>
     <ul>
         <li>Name: ${rocket.name}</li>
-        <li>Manufacturer: <a href="lsp/${rocket.manufacturer.id}">${rocket.manufacturer.name}</a></li>
+        <li>Manufacturer:${rocket.manufacturer}</li>
         <li>Country: ${rocket.country}</li>
-        <li>First flown: ${rocket.firstYearFlight}</li>
+
     </ul>
 </#if>
 
 </div>
+<form name="Delete_event" action="/rockets" method="DELETE">
+    <#if errorMsg?? && errorMsg?has_content>
+        <div id="error">
+            <p>Error: ${errorMsg}</p>
+        </div>
+    </#if>
+    <div id="buttonwrapper">
+        <button type="submit">Delete</button>
+        <a href="/">Cancel</a>
+    </div>
+</form>
 
 </body>
 </html>

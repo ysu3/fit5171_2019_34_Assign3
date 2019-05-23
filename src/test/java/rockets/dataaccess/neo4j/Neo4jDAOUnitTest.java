@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/*
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Neo4jDAOUnitTest {
     private static final String TEST_DB = "target/test-data/test-db";
@@ -233,4 +233,4 @@ public class Neo4jDAOUnitTest {
     //}
 
 
-}
+*/

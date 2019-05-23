@@ -6,6 +6,8 @@ import rockets.dataaccess.DAO;
 import rockets.model.Launch;
 import rockets.model.LaunchServiceProvider;
 import rockets.model.Rocket;
+
+import javax.security.auth.callback.LanguageCallback;
 import java.util.*;
 import java.time.LocalDate;
 import java.math.BigDecimal;
@@ -63,11 +65,23 @@ public class RocketMiner {
             if(launch.getLaunchOutcome() == Launch.LaunchOutcome.SUCCESSFUL)
                 LaunchList.add(launch);
         }
-
-        Map<LaunchServiceProvider, Long> counts = LaunchList.stream().collect(Collectors.groupingBy(o -> o.getLaunchVehicle().getManufacturer(),Collectors.counting()));
-        Map<LaunchServiceProvider, Long> sortedLsp = new LinkedHashMap<>();
-        counts.entrySet().stream().sorted(Map.Entry.<LaunchServiceProvider, Long>comparingByValue().reversed()).forEach(a -> sortedLsp.put(a.getKey(), a.getValue()));
-        ArrayList<LaunchServiceProvider> mostLsp = new ArrayList<>(sortedLsp.keySet());
+        //change the data type of Map keyvalue from LaunchServiceProvider to String
+        Map<String, Long> counts = LaunchList.stream().collect(Collectors.groupingBy(o -> o.getLaunchVehicle().getManufacturer(),Collectors.counting()));
+        Map<String, Long> sortedLsp = new LinkedHashMap<>();
+        counts.entrySet().stream().sorted(Map.Entry.<String, Long>comparingByValue().reversed()).forEach(a -> sortedLsp.put(a.getKey(), a.getValue()));
+        ArrayList<LaunchServiceProvider> mostLsp = new ArrayList<>();
+        // use the for loop to generate a new Collection to store the LaunchServiceProvider.
+        for(String key : sortedLsp.keySet())
+        {
+            for(Launch launch : launches)
+            {
+                // get each of the launch and then compare the name of the launchServiceProvider.
+                LaunchServiceProvider provider = launch.getLaunchServiceProvider();
+                  if(key.equals(provider.getName()))
+                      //add the LaunchServiceProvider into the new list.
+                      mostLsp.add(provider);
+            }
+        }
         return mostLsp.stream().limit(k).collect(Collectors.toList());
     }
 
