@@ -331,6 +331,7 @@ public class App {
                 attributes.put("errorMsg", "Invalid Rocket name you chose.");
                 attributes.put("rocket_name", rockets_name);
                 return new ModelAndView(attributes, "rockets.html.ftl");
+                
             }
         }, new FreeMarkerEngine());
     }
