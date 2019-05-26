@@ -298,12 +298,6 @@ public class App {
             Map<String, Object> attributes = new HashMap<>();
             String rockets_name = req.queryParams("rockets_name");
             String country = req.queryParams("country");
-            //LaunchServiceProvider manufacturer = req.queryParams("manufacturer");
-            String massToLEO = req.queryParams("massToLEO");
-            String massToGTO = req.queryParams("massToGTO");
-            String massToOther = req.queryParams("massToOther");
-
-
 
             logger.info("Rockets <" + rockets_name + ">, ");
 
@@ -312,27 +306,21 @@ public class App {
                 rocket = new Rocket();
                 rocket.setName(rockets_name);
                 rocket.setCountry(country);
-                //rocket.setManufacturer(manufacturer);
-                //rocket.setMassToLEO(massToLEO);
-                //rocket.setMassToGTO(massToGTO);
-                //rocket.setMassToOther(massToOther);
                 dao.createOrUpdate(rocket);
                 rocket = dao.getRocketByName(rockets_name);
             } catch (Exception e) {
                 handleException(res, attributes, e, "rockets.html.ftl");
             }
-            /*if (null != rocket && rocket.getName().equals(rockets_name)) {
+            if (null != rocket && rocket.getName().equals(rockets_name)) {
                 res.status(301);
                 req.session(true);
                 req.session().attribute("rocket", rocket);
                 res.redirect("/rockets");
                 return new ModelAndView(attributes, "rockts.html.ftl");
             } else {
-                //attributes.put("errorMsg", "Invalid Rocket name you chose.");
-                //attributes.put("rocket_name", rockets_name);
                 return new ModelAndView(attributes, "create_rocket.html.ftl");
 
-            }*/
+            }
         }, new FreeMarkerEngine());
     }
 
