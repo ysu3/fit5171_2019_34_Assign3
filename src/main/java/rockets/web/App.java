@@ -313,32 +313,32 @@ public class App {
                 rocket.setName(rockets_name);
                 rocket.setCountry(country);
                 //rocket.setManufacturer(manufacturer);
-                rocket.setMassToLEO(massToLEO);
-                rocket.setMassToGTO(massToGTO);
-                rocket.setMassToOther(massToOther);
+                //rocket.setMassToLEO(massToLEO);
+                //rocket.setMassToGTO(massToGTO);
+                //rocket.setMassToOther(massToOther);
                 dao.createOrUpdate(rocket);
                 rocket = dao.getRocketByName(rockets_name);
             } catch (Exception e) {
                 handleException(res, attributes, e, "rockets.html.ftl");
             }
-            if (null != rocket && rocket.getName().equals(rockets_name)) {
+            /*if (null != rocket && rocket.getName().equals(rockets_name)) {
                 res.status(301);
                 req.session(true);
                 req.session().attribute("rocket", rocket);
-                res.redirect("/rocket");
-                return new ModelAndView(attributes, "base_page.html.ftl");
+                res.redirect("/rockets");
+                return new ModelAndView(attributes, "rockts.html.ftl");
             } else {
-                attributes.put("errorMsg", "Invalid Rocket name you chose.");
-                attributes.put("rocket_name", rockets_name);
-                return new ModelAndView(attributes, "rockets.html.ftl");
-                
-            }
+                //attributes.put("errorMsg", "Invalid Rocket name you chose.");
+                //attributes.put("rocket_name", rockets_name);
+                return new ModelAndView(attributes, "create_rocket.html.ftl");
+
+            }*/
         }, new FreeMarkerEngine());
     }
 
     // TODO: Need to TDD this
     private static void handleGetCreateRocket() {
-        get("/rocket/create", (req, res) -> {
+        get("/create_rocket", (req, res) -> {
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("rockets_name", "");
             attributes.put("country", "");
@@ -346,7 +346,7 @@ public class App {
             attributes.put("massToGTO", "");
             attributes.put("massToOther", "");
 
-            return  new ModelAndView(attributes, "rocket.html.ftl");
+            return new ModelAndView(attributes, "create_rocket.html.ftl");
         }, new FreeMarkerEngine());
     }
 
